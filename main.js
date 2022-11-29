@@ -14,7 +14,8 @@ __  ________   ______   _________    ____  ______  __
 const bot = new Telegraf(process.env.BOT_TOKEN);
 bot.start((ctx) => ctx.reply('Welcome'));
 bot.on(message('sticker'), (ctx) => ctx.reply('👍'));
-bot.hears('syamil', (ctx) => ctx.reply('Syamil hensem'))
+bot.hears('syamil', (ctx) => ctx.replyWithPhoto({ source: '305081440_391562859721132_2427466848185335632_n.webp' }))
+bot.hears('haziq', ctx => ctx.replyWithPhoto({source: 'haziq1.jpeg'}))
 bot.hears('faz', (ctx) => ctx.reply('Fazpro'))
 bot.hears('hi', (ctx) => ctx.reply('Hey there'));
 bot.launch();
@@ -45,14 +46,17 @@ bot.command("working", (ctx) => {
       );
 })
 
+function chunk (arr, size) {
+    return new Array(Math.ceil(arr.length / size)).fill(null).map(() => arr.splice(0, size));
+  }  
+
 bot.command("leave", ctx => {
     return ctx.reply(
         `On leave for ${new Date().toLocaleDateString("en-GB", {
           timeZone: "Asia/Kuala_Lumpur",
         })}`,
         Markup.inlineKeyboard(
-            LEAVE_ACTIONS.map(x => [Markup.button.callback(x, x)]),
-            [Markup.button.callback("Cancel", "cancel")],
+            chunk([...LEAVE_ACTIONS.map(x => Markup.button.callback(x, x)), Markup.button.callback("Cancel", "cancel")], 3)
         )
       );
 })
@@ -64,6 +68,10 @@ bot.on(message('text'), (ctx) =>
 );
 
 /// LOGIC
+
+bot.action('cancel', ctx => {
+    ctx.editMessageText(`Cancelled`)
+})
 
 WORK_ACTIONS.forEach(x => {
     let ts = new Date().toISOString()
