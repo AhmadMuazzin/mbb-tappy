@@ -5,7 +5,8 @@
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon main"
+    "dev": "nodemon main",
+    "start": "pm2 start --name tappy main.js"
   },
   "author": "Aqlan Nor Azman; Ahmad Syamil Sahrom",
   "license": "ISC",
