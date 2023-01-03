@@ -1,7 +1,11 @@
-require('dotenv').config()
+// require('dotenv').config()
+require('./db/mongoose');
+const Attd = require('./models/attendance');
 const fs = require('fs');
 const { Telegraf, Markup } = require('telegraf');
 const { message } = require('telegraf/filters');
+// const { Telegraf } = require("telegraf");
+
 
 console.log(`
 __  ________   ______   _________    ____  ______  __
@@ -80,7 +84,8 @@ WORK_ACTIONS.forEach(x => {
         ctx.replyWithMarkdownV2(
             `Status: ${x}`
           )
-        fs.writeFile('attendance.log', `${ts} ${ctx.from.id} WORKING ${x}\n`, { flag: 'a+' }, err => {});
+        // fs.writeFile('attendance.log', `${ts} ${ctx.from.id} WORKING ${x}\n`, { flag: 'a+' }, err => {});
+        Attd.create({'ts': ts, 'pf': ctx.from.id, 'attendance':x}).catch(error => error)
     })
 })
 
@@ -91,7 +96,8 @@ LEAVE_ACTIONS.forEach(x => {
         ctx.replyWithMarkdownV2(
             `Status: ${x}`
           )
-        fs.writeFile('attendance.log', `${ts} ${ctx.from.id} LEAVE ${x}\n`, { flag: 'a+' }, err => {});
+        // fs.writeFile('attendance.log', `${ts} ${ctx.from.id} LEAVE ${x}\n`, { flag: 'a+' }, err => {});
+        Attd.create({'ts': ts, 'pf': ctx.from.id, 'attendance':x}).catch(error => error)
     })
 })
 
